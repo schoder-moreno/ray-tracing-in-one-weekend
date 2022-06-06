@@ -19,3 +19,6 @@ Images showing the progression of the book, chapter by chapter.
 
 ## 5.2 Creating Our First Raytraced Image
 ![](images/5.2.png)
+
+## 6.1 Shading with Surface Normals
+![](images/6.1.png)

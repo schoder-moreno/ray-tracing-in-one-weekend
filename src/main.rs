@@ -1,5 +1,6 @@
 use image::{RgbImage, ImageBuffer, Rgb};
 use color::{Color, Scale};
+use nalgebra::Vector3;
 use ray::Ray;
 use camera::{Camera, Point3};
 
@@ -47,21 +48,28 @@ fn create_ray(camera: &Camera, x: u32, y: u32) -> Ray {
     return Ray::new(&camera, u, v);
 }
 
-fn hit_sphere(center: Point3, radius: f64, ray: &Ray) -> bool {
+fn hit_sphere(center: Point3, radius: f64, ray: &Ray) -> f64 {
     let oc = ray.origin - center;
     let a = ray.direction.dot(&ray.direction);
     let b = 2.0 * oc.dot(&ray.direction);
     let c = oc.dot(&oc) - radius*radius;
     let discriminant = b*b - 4.0*a*c;
 
-    return discriminant > 0.0;
+    if discriminant < 0. {
+        return -1.;
+    } else {
+        return (-b - discriminant.sqrt()) / (2.*a);
+    }
 }
 
 fn ray_color(ray: &Ray) -> Color {
-    if hit_sphere(Point3::new(0.,0.,-1.), 0.5, ray){
-        return Color::new(1., 0., 0.);
+    let t = hit_sphere(Point3::new(0.,0.,-1.), 0.5, ray);
+
+    if t > 0. {
+        let normal = (ray.at(t) - Vector3::new(0., 0., -1.)).normalize();
+        return 0.5*Color::new(normal.x+1., normal.y+1., normal.z+1.);
     }
-    
+
     let unit_direction = ray.direction.normalize();
     let t = 0.5*(unit_direction.y + 1.0);
     return (1.0-t)*Color::new(1.0, 1.0, 1.0) + t*Color::new(0.5, 0.7, 1.0);
