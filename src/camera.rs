@@ -1,6 +1,6 @@
 use nalgebra::Vector3;
 
-type Point3 = Vector3<f64>;
+pub type Point3 = Vector3<f64>;
 
 pub struct Camera{
     pub origin: Point3,

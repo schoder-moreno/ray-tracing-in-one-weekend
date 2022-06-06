@@ -16,3 +16,6 @@ Images showing the progression of the book, chapter by chapter.
 
 ## 4.2 Sending Rays Into the Scene
 ![](images/4.2.png) 
+
+## 5.2 Creating Our First Raytraced Image
+![](images/5.2.png)
