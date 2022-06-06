@@ -27,3 +27,10 @@ Images showing the progression of the book, chapter by chapter.
 
 ### 6.7 Common Constants and Utility Functions
 ![](images/6.7.png)
+
+## 7 Antialiasing
+
+### 7.2 Generating Pixels with Multiple Samples
+![](images/7.2.png)
+
+![](images/7.2%20-%20comparison.png)

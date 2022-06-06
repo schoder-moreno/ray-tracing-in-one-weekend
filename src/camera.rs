@@ -1,5 +1,6 @@
 use nalgebra::Vector3;
 use crate::core::Point3;
+use crate::ray::Ray;
 
 pub struct Camera{
     pub origin: Point3,
@@ -24,5 +25,12 @@ impl Camera {
             vertical: vertical,
             lower_left_corner: origin - horizontal/2. - vertical/2. - Vector3::new(0., 0., focal_length)
         }
+    }
+
+    pub fn get_ray(&self, u: f64, v: f64) -> Ray {
+        return Ray{
+            origin: self.origin,
+            direction: self.lower_left_corner + u*self.horizontal + v*self.vertical - self.origin
+        };
     }
 }

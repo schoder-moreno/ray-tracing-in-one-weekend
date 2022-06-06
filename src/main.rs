@@ -6,6 +6,7 @@ use ray::Ray;
 use camera::Camera;
 use hittable::{HittableList, HitRecord};
 use sphere::Sphere;
+use rand::Rng;
 
 mod core;
 mod color;
@@ -18,6 +19,7 @@ mod sphere;
 const ASPECT_RATIO: f64 = 16.0 / 9.0;
 const IMAGE_WIDTH: u32 = 400;
 const IMAGE_HEIGHT: u32 = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as u32;
+const SAMPLES_PER_PIXEL: u32 = 100;
 
 fn main()
 {
@@ -33,6 +35,7 @@ fn main()
 
     // Render
 
+    let mut rng = rand::thread_rng();
     let mut buffer: RgbImage = ImageBuffer::new(IMAGE_WIDTH, IMAGE_HEIGHT);
     for (x, y, pixel) in buffer.enumerate_pixels_mut(){
         if x == 0
@@ -40,9 +43,13 @@ fn main()
             print!("\rScanlines remaining: {} ", IMAGE_HEIGHT-y-1);
         }
 
-        let ray = create_ray(&camera, x, y);
-        let pixel_color = ray_color(&ray, &world); 
-        *pixel = Rgb(pixel_color.to_rgb_scale());
+        let mut pixel_color = Color::new(0., 0., 0.);
+        for _ in 0..SAMPLES_PER_PIXEL {
+            let ray = create_ray(&camera, x, y, &mut rng);
+            pixel_color += ray_color(&ray, &world); 
+        }
+
+        *pixel = Rgb(pixel_color.to_rgb_scale(SAMPLES_PER_PIXEL));
     }
 
     match buffer.save("image.png")
@@ -52,10 +59,10 @@ fn main()
     }
 }
 
-fn create_ray(camera: &Camera, x: u32, y: u32) -> Ray {
-    let u = x as f64 / (IMAGE_WIDTH - 1) as f64;
-    let v = (IMAGE_HEIGHT - y) as f64 / (IMAGE_HEIGHT - 1) as f64;
-    return Ray::new(&camera, u, v);
+fn create_ray(camera: &Camera, x: u32, y: u32, rng: &mut impl Rng) -> Ray {
+    let u = (x as f64 + rng.gen::<f64>()) / (IMAGE_WIDTH - 1) as f64;
+    let v = ((IMAGE_HEIGHT - y)as f64 + rng.gen::<f64>()) / (IMAGE_HEIGHT - 1) as f64;
+    return camera.get_ray(u, v);
 }
 
 fn ray_color(ray: &Ray, world: &HittableList) -> Color {
