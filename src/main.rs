@@ -1,4 +1,8 @@
 use image::{RgbImage, ImageBuffer, Rgb};
+use nalgebra::{Vector3};
+use color::Color;
+
+mod color;
 
 fn main()
 {
@@ -15,16 +19,9 @@ fn main()
         {
             print!("\rScanlines remaining: {} ", image_height-y-1);
         }
-
-        let r = x as f64 / (image_width - 1) as f64;
-        let g = (image_height - y) as f64 / (image_height - 1) as f64;
-        let b = 0.25;
-
-        let ir = (255.999 * r) as u8;
-        let ig = (255.999 * g) as u8;
-        let ib = (255.999 * b) as u8;
         
-        *pixel = Rgb([ir, ig, ib]);
+        let pixel_color = Vector3::new(x as f64 / (image_width - 1) as f64, (image_height - y) as f64 / (image_height - 1) as f64, 0.25);
+        *pixel = Rgb(pixel_color.write_color());
     }
 
     match buffer.save("image.png")
