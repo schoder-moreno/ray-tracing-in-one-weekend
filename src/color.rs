@@ -1,6 +1,5 @@
-use nalgebra::Vector3;
+use crate::core::Color;
 
-pub type Color = Vector3<f64>;
 pub trait Scale {
     fn to_rgb_scale(&self) -> [u8; 3];
 }

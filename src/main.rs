@@ -1,13 +1,18 @@
+use crate::core::{Color, Point3};
 use image::{RgbImage, ImageBuffer, Rgb};
-use color::{Color, Scale};
+use color::Scale;
 use nalgebra::Vector3;
 use ray::Ray;
-use camera::{Camera, Point3};
+use camera::Camera;
+use hittable::{HittableList, HitRecord};
+use sphere::Sphere;
 
+mod core;
 mod color;
 mod ray;
 mod camera;
-
+mod hittable;
+mod sphere;
 
 // Image
 const ASPECT_RATIO: f64 = 16.0 / 9.0;
@@ -16,6 +21,12 @@ const IMAGE_HEIGHT: u32 = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as u32;
 
 fn main()
 {
+    // World
+
+    let mut world = HittableList::new();
+    world.push(Sphere {center: Point3::new(0., 0., -1.), radius: 0.5});
+    world.push(Sphere {center: Point3::new(0., -100.5, -1.), radius: 100.});
+
     // Camera
 
     let camera = Camera::new(ASPECT_RATIO);
@@ -28,10 +39,9 @@ fn main()
         {
             print!("\rScanlines remaining: {} ", IMAGE_HEIGHT-y-1);
         }
-        
 
         let ray = create_ray(&camera, x, y);
-        let pixel_color = ray_color(&ray); 
+        let pixel_color = ray_color(&ray, &world); 
         *pixel = Rgb(pixel_color.to_rgb_scale());
     }
 
@@ -48,26 +58,10 @@ fn create_ray(camera: &Camera, x: u32, y: u32) -> Ray {
     return Ray::new(&camera, u, v);
 }
 
-fn hit_sphere(center: Point3, radius: f64, ray: &Ray) -> f64 {
-    let oc = ray.origin - center;
-    let a = ray.direction.dot(&ray.direction);
-    let b = 2.0 * oc.dot(&ray.direction);
-    let c = oc.dot(&oc) - radius*radius;
-    let discriminant = b*b - 4.0*a*c;
-
-    if discriminant < 0. {
-        return -1.;
-    } else {
-        return (-b - discriminant.sqrt()) / (2.*a);
-    }
-}
-
-fn ray_color(ray: &Ray) -> Color {
-    let t = hit_sphere(Point3::new(0.,0.,-1.), 0.5, ray);
-
-    if t > 0. {
-        let normal = (ray.at(t) - Vector3::new(0., 0., -1.)).normalize();
-        return 0.5*Color::new(normal.x+1., normal.y+1., normal.z+1.);
+fn ray_color(ray: &Ray, world: &HittableList) -> Color {
+    let mut record = HitRecord{point: Point3::new(0., 0., 0.), normal: Vector3::new(0.,0.,0.), t:0. , front_face:false };
+    if world.hit(ray, 0., f64::MAX, &mut record){
+        return 0.5 * (record.normal + Color::new(1., 1., 1.));
     }
 
     let unit_direction = ray.direction.normalize();

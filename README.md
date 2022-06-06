@@ -11,14 +11,19 @@ The program will emit an image file (`image.png`).
 # Image outputs
 Images showing the progression of the book, chapter by chapter.
 
-## 2.2 Hello world
+## 2 Output an Image
 ![](images/2.2.png)
 
-## 4.2 Sending Rays Into the Scene
+## 4 Rays, a Simple Camera, and Background
 ![](images/4.2.png) 
 
-## 5.2 Creating Our First Raytraced Image
+## 5 Adding a sphere
 ![](images/5.2.png)
 
-## 6.1 Shading with Surface Normals
+## 6 Surface Normals and Multiple Objects
+
+### 6.1 Shading with Surface Normals
 ![](images/6.1.png)
+
+### 6.7 Common Constants and Utility Functions
+![](images/6.7.png)

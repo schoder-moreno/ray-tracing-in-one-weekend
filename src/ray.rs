@@ -1,6 +1,5 @@
-use nalgebra::{Vector3};
-
 use crate::camera::Camera;
+use nalgebra::Vector3;
 
 pub struct Ray {
     pub origin: Vector3<f64>,
