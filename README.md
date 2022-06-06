@@ -14,4 +14,5 @@ Images showing the progression of the book, chapter by chapter.
 ## 2.2 Hello world
 ![](images/2.2.png)
 
- 
+## 4.2 Sending Rays Into the Scene
+![](images/4.2.png) 

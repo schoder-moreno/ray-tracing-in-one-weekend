@@ -1,27 +1,38 @@
 use image::{RgbImage, ImageBuffer, Rgb};
-use nalgebra::{Vector3};
-use color::Color;
+use color::{Color, Scale};
+use ray::Ray;
+use camera::Camera;
 
 mod color;
+mod ray;
+mod camera;
+
+
+
+// Image
+const ASPECT_RATIO: f64 = 16.0 / 9.0;
+const IMAGE_WIDTH: u32 = 400;
+const IMAGE_HEIGHT: u32 = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as u32;
 
 fn main()
 {
-    // Image
+    // Camera
 
-    let image_width: u32 = 256;
-    let image_height: u32 = 256;
+    let camera = Camera::new(ASPECT_RATIO);
 
     // Render
 
-    let mut buffer: RgbImage = ImageBuffer::new(image_width, image_height);
+    let mut buffer: RgbImage = ImageBuffer::new(IMAGE_WIDTH, IMAGE_HEIGHT);
     for (x, y, pixel) in buffer.enumerate_pixels_mut(){
         if x == 0
         {
-            print!("\rScanlines remaining: {} ", image_height-y-1);
+            print!("\rScanlines remaining: {} ", IMAGE_HEIGHT-y-1);
         }
         
-        let pixel_color = Vector3::new(x as f64 / (image_width - 1) as f64, (image_height - y) as f64 / (image_height - 1) as f64, 0.25);
-        *pixel = Rgb(pixel_color.write_color());
+
+        let ray = create_ray(&camera, x, y);
+        let pixel_color = ray_color(&ray); 
+        *pixel = Rgb(pixel_color.to_rgb_scale());
     }
 
     match buffer.save("image.png")
@@ -29,4 +40,16 @@ fn main()
         Err(e) => eprintln!("Error when writing to file: {}", e),
         Ok(()) => println!("Done")
     }
+}
+
+fn create_ray(camera: &Camera, x: u32, y: u32) -> Ray {
+    let u = x as f64 / (IMAGE_WIDTH - 1) as f64;
+    let v = (IMAGE_HEIGHT - y) as f64 / (IMAGE_HEIGHT - 1) as f64;
+    return Ray::new(&camera, u, v);
+}
+
+fn ray_color(ray: &Ray) -> Color {
+    let unit_direction = ray.direction.normalize();
+    let t = 0.5*(unit_direction.y + 1.0);
+    return (1.0-t)*Color::new(1.0, 1.0, 1.0) + t*Color::new(0.5, 0.7, 1.0);
 }
