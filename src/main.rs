@@ -11,6 +11,11 @@ fn main()
 
     let mut buffer: RgbImage = ImageBuffer::new(image_width, image_height);
     for (x, y, pixel) in buffer.enumerate_pixels_mut(){
+        if x == 0
+        {
+            print!("\rScanlines remaining: {} ", image_height-y-1);
+        }
+
         let r = x as f64 / (image_width - 1) as f64;
         let g = (image_height - y) as f64 / (image_height - 1) as f64;
         let b = 0.25;
