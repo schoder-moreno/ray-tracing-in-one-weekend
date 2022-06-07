@@ -5,7 +5,7 @@ A Rust implementation of Peter Shirley's [Ray Tracing in One Weekend](https://ra
 ## How to run
 On Windows: 
 ```
-cargo run
+cargo run --release
 ```
 The program will emit an image file (`image.png`).
 # Image outputs
@@ -29,8 +29,19 @@ Images showing the progression of the book, chapter by chapter.
 ![](images/6.7.png)
 
 ## 7 Antialiasing
-
-### 7.2 Generating Pixels with Multiple Samples
 ![](images/7.2.png)
 
 ![](images/7.2%20-%20comparison.png)
+
+*Before and after antialiasing*
+
+## 8 Diffuse Materials
+
+### 8.1 A Simple Diffuse Material
+![](images/8.2.png)
+
+### 8.3 Using Gamma Correction for Accurate Color Intensity
+![](images/8.3.png)
+
+### 8.4 Fixing Shadow Acne
+![](images/8.4.png)
