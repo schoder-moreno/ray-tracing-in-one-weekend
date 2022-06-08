@@ -45,3 +45,11 @@ Images showing the progression of the book, chapter by chapter.
 
 ### 8.4 Fixing Shadow Acne
 ![](images/8.4.png)
+
+## 9 Metal
+
+### 9.5 A Scene with Metal Spheres
+![](images/9.5.png)
+
+### 9.6 Fuzzy Reflection
+![](images/9.6.png)

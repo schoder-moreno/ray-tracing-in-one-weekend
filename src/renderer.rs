@@ -1,6 +1,6 @@
 use nalgebra::Vector3;
 
-use crate::{core::{Color, Point3, random_in_unit_sphere}, hittable::{HittableList, HitRecord}, camera::Camera, ray::Ray, color::Scale};
+use crate::{core::{Color, Point3, random_in_unit_sphere}, hittable::{HittableList, HitRecord}, camera::Camera, ray::Ray, color::Scale, material::Material};
 
 pub struct Renderer {
     pub world: HittableList,
@@ -34,8 +34,14 @@ impl Renderer {
             return Color::new(0., 0., 0.);
         }
 
-        let mut record = HitRecord{point: Point3::new(0., 0., 0.), normal: Vector3::new(0.,0.,0.), t:0. , front_face:false };
+        let mut record = HitRecord{point: Point3::new(0., 0., 0.), normal: Vector3::new(0.,0.,0.), t:0. , front_face:false, material: Material::Lambertian { albedo: Color::new(0.,0.,0.) }};
         if self.world.hit(ray, 0.001, f64::MAX, &mut record){
+            let mut scattered_ray = Ray::new(Point3::new(0.,0.,0.), Vector3::new(0.,0.,0.));
+            let mut attenuation = Color::new(0.,0.,0.);
+            let material = record.material.clone();
+            if material.scatter(ray, &mut record, &mut attenuation, &mut scattered_ray) {
+                return attenuation.component_mul(&self.ray_color(&scattered_ray, depth-1));
+            }
             let target = record.point + record.normal + random_in_unit_sphere();
             return 0.5 * self.ray_color(&Ray::new(record.point, target - record.point), depth - 1);
         }

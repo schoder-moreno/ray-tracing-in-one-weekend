@@ -19,3 +19,7 @@ pub fn random_in_unit_sphere() -> Vector3<f64> {
         return p;
     }
 }
+
+pub fn random_unit_vector() -> Vector3<f64> {
+    return random_in_unit_sphere().normalize();
+}

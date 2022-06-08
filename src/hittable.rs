@@ -1,5 +1,6 @@
 use nalgebra::Vector3;
-use crate::core::Point3;
+use crate::core::{Point3, Color};
+use crate::material::Material;
 use crate::ray::Ray;
 
 #[derive(Clone)]
@@ -7,7 +8,8 @@ pub struct HitRecord {
     pub point: Point3,
     pub normal: Vector3<f64>,
     pub t: f64,
-    pub front_face: bool
+    pub front_face: bool,
+    pub material: Material
 }
 
 impl HitRecord {
@@ -41,7 +43,7 @@ impl HittableList {
 
 impl HittableList {
     pub fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, record: &mut HitRecord) -> bool {
-        let mut temp_record = HitRecord{point: Point3::new(0.,0.,0.), normal: Vector3::new(0.,0.,0.), t: 0., front_face: false};
+        let mut temp_record = HitRecord{point: Point3::new(0.,0.,0.), normal: Vector3::new(0.,0.,0.), t: 0., front_face: false, material: Material::Lambertian{albedo: Color::new(0.,0.,0.)}};
         let mut hit_anything = false;
         let mut closest_so_far = t_max;
 
