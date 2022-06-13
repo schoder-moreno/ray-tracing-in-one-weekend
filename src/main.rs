@@ -1,6 +1,7 @@
-use crate::core::{Point3, Color};
+use crate::core::{Point3, Color, PI};
 use image::{RgbImage, ImageBuffer, Rgb};
 use camera::Camera;
+use nalgebra::Vector3;
 use world::World;
 use material::Material;
 use renderer::Renderer;
@@ -25,6 +26,7 @@ fn main()
 {
     // World
 
+    let R = (PI/4.).cos();
     let material_ground = Material::Lambertian{albedo: Color::new(0.8, 0.8, 0.0)};
     let material_center = Material::Lambertian {albedo: Color::new(0.1, 0.2, 0.5)};
     let material_left = Material::Dielectric { index_of_refraction: 1.5 };
@@ -39,7 +41,7 @@ fn main()
 
     // Camera
 
-    let camera = Camera::new(ASPECT_RATIO);
+    let camera = Camera::new(Point3::new(-2., 2., 1.), Point3::new(0.,0.,-1.), Vector3::new(0.,1.,0.), 20.0, ASPECT_RATIO);
 
     // Render
 

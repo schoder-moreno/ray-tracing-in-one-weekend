@@ -64,3 +64,16 @@ Images showing the progression of the book, chapter by chapter.
 ### 10.5 Modeling a Hollow Glass Sphere
 ![](images/10.5.png)
 
+## 11 Positionable Camera
+
+### 11.1 Camera Viewing Geometry
+![](images/11.1.png)
+
+### 11.2 Positioning and Orienting the Camera
+![](images/11.2.1.png)
+
+*A distant view*
+
+![](images/11.2.2.png)
+
+*Zooming in*

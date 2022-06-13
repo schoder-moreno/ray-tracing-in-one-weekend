@@ -23,3 +23,7 @@ pub fn random_in_unit_sphere() -> Vector3<f64> {
 pub fn random_unit_vector() -> Vector3<f64> {
     return random_in_unit_sphere().normalize();
 }
+
+pub fn degrees_to_radians(degrees: f64) -> f64 {
+    return degrees * PI / 180.
+}
