@@ -1,9 +1,9 @@
-use nalgebra::Vector3;
+use nalgebra::{Vector3,clamp};
 
-use crate::{core::{Color, Point3, random_in_unit_sphere}, hittable::{HittableList, HitRecord}, camera::Camera, ray::Ray, color::Scale, material::Material};
+use crate::{core::{Color, Point3}, world::{World, HitRecord}, camera::Camera, ray::Ray, material::Material};
 
 pub struct Renderer {
-    pub world: HittableList,
+    pub world: World,
     pub camera: Camera,
     pub image_width: u32,
     pub image_height: u32,
@@ -20,7 +20,7 @@ impl Renderer {
             pixel_color += self.ray_color(&ray, self.max_depth); 
         }
 
-        return pixel_color.to_rgb_scale(self.samples_per_pixel);
+        return self.to_rgb_scale(&pixel_color);
     }
 
     fn create_ray(&self, x: u32, y: u32) -> Ray {
@@ -42,12 +42,28 @@ impl Renderer {
             if material.scatter(ray, &mut record, &mut attenuation, &mut scattered_ray) {
                 return attenuation.component_mul(&self.ray_color(&scattered_ray, depth-1));
             }
-            let target = record.point + record.normal + random_in_unit_sphere();
-            return 0.5 * self.ray_color(&Ray::new(record.point, target - record.point), depth - 1);
+            return Color::new(0.,0.,0.); 
         }
 
         let unit_direction = ray.direction.normalize();
         let t = 0.5*(unit_direction.y + 1.0);
         return (1.0-t)*Color::new(1.0, 1.0, 1.0) + t*Color::new(0.5, 0.7, 1.0);
+    }
+
+    fn to_rgb_scale(&self, color: &Color) -> Color {
+        let mut r = color.x;
+        let mut g = color.y;
+        let mut b = color.z;
+
+        let scale = 1. / self.samples_per_pixel as f64;
+        r = (scale * r).sqrt();
+        g = (scale * g).sqrt();
+        b = (scale * b).sqrt();
+
+        return Color::new(
+            255.999 * clamp(r, 0., 0.999),
+            255.999 * clamp(g, 0., 0.999),
+            255.999 * clamp(b, 0., 0.999)
+        );
     }
 }

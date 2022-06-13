@@ -1,16 +1,15 @@
 use crate::core::{Point3, Color};
 use image::{RgbImage, ImageBuffer, Rgb};
 use camera::Camera;
-use hittable::HittableList;
+use world::World;
 use material::Material;
 use renderer::Renderer;
 use sphere::Sphere;
 
 mod core;
-mod color;
 mod ray;
 mod camera;
-mod hittable;
+mod world;
 mod sphere;
 mod renderer;
 mod material;
@@ -27,14 +26,15 @@ fn main()
     // World
 
     let material_ground = Material::Lambertian{albedo: Color::new(0.8, 0.8, 0.0)};
-    let material_center = Material::Lambertian { albedo: Color::new(0.7, 0.3, 0.3) };
-    let material_left = Material::Metal { albedo: Color::new(0.8, 0.8, 0.8 ), fuzz: 0.3 };
-    let material_right = Material::Metal { albedo: Color::new(0.8, 0.6, 0.2), fuzz: 1.0 };
+    let material_center = Material::Lambertian {albedo: Color::new(0.1, 0.2, 0.5)};
+    let material_left = Material::Dielectric { index_of_refraction: 1.5 };
+    let material_right = Material::Metal { albedo: Color::new(0.8, 0.6, 0.2), fuzz: 0.0 };
 
-    let mut world = HittableList::new();
+    let mut world = World::new();
     world.push(Sphere {center: Point3::new(0., -100.5, -1.), radius: 100., material: material_ground});
     world.push(Sphere {center: Point3::new(0., 0.0, -1.), radius: 0.5, material: material_center});
-    world.push(Sphere {center: Point3::new(-1., 0.0, -1.), radius: 0.5, material: material_left});
+    world.push(Sphere {center: Point3::new(-1., 0.0, -1.), radius: 0.5, material: material_left.clone()});
+    world.push(Sphere {center: Point3::new(-1., 0.0, -1.), radius: -0.4, material: material_left.clone()});
     world.push(Sphere {center: Point3::new(1., 0.0, -1.), radius: 0.5, material: material_right});
 
     // Camera

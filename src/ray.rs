@@ -1,6 +1,6 @@
 use nalgebra::Vector3;
 
-use crate::core::Point3;
+use crate::{core::Point3};
 
 pub struct Ray {
     pub origin: Vector3<f64>,

@@ -3,7 +3,6 @@ Ray tracing in one weekend in Rust
 A Rust implementation of Peter Shirley's [Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html).
 
 ## How to run
-On Windows: 
 ```
 cargo run --release
 ```
@@ -53,3 +52,15 @@ Images showing the progression of the book, chapter by chapter.
 
 ### 9.6 Fuzzy Reflection
 ![](images/9.6.png)
+
+## 10 Dielectrics
+
+### 10.2 Snell's Law
+![](images/10.2.png)
+
+### 10.3 Total Internal Reflection
+![](images/10.3.png)
+
+### 10.5 Modeling a Hollow Glass Sphere
+![](images/10.5.png)
+

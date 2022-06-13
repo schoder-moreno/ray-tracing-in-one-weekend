@@ -19,29 +19,25 @@ impl HitRecord {
     }
 }
 
-pub trait Hittable {
+pub trait Object {
     fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, record: &mut HitRecord) -> bool;
 }
 
-pub struct HittableList {
-    objects: Vec<Box<dyn Hittable>>,
+pub struct World {
+    objects: Vec<Box<dyn Object>>,
 }
 
-impl HittableList {
+impl World {
     pub fn new () -> Self {
         Self { objects: Vec::new() }
     }
 
-    pub fn clear(&mut self) {
-        self.objects.clear();
-    }
-
-    pub fn push<S: Hittable + 'static>(&mut self, object: S) {
+    pub fn push<S: Object + 'static>(&mut self, object: S) {
         self.objects.push(Box::new(object));
     }
 }
 
-impl HittableList {
+impl World {
     pub fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, record: &mut HitRecord) -> bool {
         let mut temp_record = HitRecord{point: Point3::new(0.,0.,0.), normal: Vector3::new(0.,0.,0.), t: 0., front_face: false, material: Material::Lambertian{albedo: Color::new(0.,0.,0.)}};
         let mut hit_anything = false;

@@ -1,5 +1,5 @@
 use crate::core::Point3;
-use crate::hittable::{Hittable, HitRecord};
+use crate::world::{Object, HitRecord};
 use crate::material::Material;
 use crate::ray::Ray;
 
@@ -9,7 +9,7 @@ pub struct Sphere {
     pub material: Material
 }
 
-impl Hittable for Sphere {
+impl Object for Sphere {
     fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, record: &mut HitRecord) -> bool {
         let oc = ray.origin - self.center;
         let a = ray.direction.magnitude_squared();

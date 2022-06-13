@@ -1,4 +1,4 @@
-use nalgebra::Vector3;
+use nalgebra::{Vector3};
 use rand::Rng;
 
 pub type Point3 = Vector3<f64>;
