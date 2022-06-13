@@ -1,4 +1,4 @@
-use crate::core::{Point3, Color, PI};
+use crate::core::{Point3, Color};
 use image::{RgbImage, ImageBuffer, Rgb};
 use camera::Camera;
 use nalgebra::Vector3;
@@ -26,7 +26,6 @@ fn main()
 {
     // World
 
-    let R = (PI/4.).cos();
     let material_ground = Material::Lambertian{albedo: Color::new(0.8, 0.8, 0.0)};
     let material_center = Material::Lambertian {albedo: Color::new(0.1, 0.2, 0.5)};
     let material_left = Material::Dielectric { index_of_refraction: 1.5 };
@@ -41,7 +40,14 @@ fn main()
 
     // Camera
 
-    let camera = Camera::new(Point3::new(-2., 2., 1.), Point3::new(0.,0.,-1.), Vector3::new(0.,1.,0.), 20.0, ASPECT_RATIO);
+    let lookfrom = Point3::new(3., 3., 2.);
+    let lookat = Point3::new(0.,0.,-1.);
+    let vup = Vector3::new(0.,1.,0.);
+    let vertical_fov = 20.0;
+    let aperture = 2.0;
+    let dist_to_focus = (lookfrom-lookat).magnitude();
+
+    let camera = Camera::new(lookfrom, lookat, vup, vertical_fov, ASPECT_RATIO, aperture, dist_to_focus);
 
     // Render
 

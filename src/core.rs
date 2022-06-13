@@ -27,3 +27,13 @@ pub fn random_unit_vector() -> Vector3<f64> {
 pub fn degrees_to_radians(degrees: f64) -> f64 {
     return degrees * PI / 180.
 }
+
+pub fn random_in_unit_disk() -> Vector3<f64> {
+    loop {
+        let p = Vector3::new(rand::thread_rng().gen_range((-1.)..1.), rand::thread_rng().gen_range((-1.)..1.), 0.);
+        if p.magnitude_squared() >= 1. {
+            continue;
+        }
+        return p;
+    }
+}

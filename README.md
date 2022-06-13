@@ -77,3 +77,9 @@ Images showing the progression of the book, chapter by chapter.
 ![](images/11.2.2.png)
 
 *Zooming in*
+
+## 12 Defocus Blur
+
+![](images/12.2.png)
+
+*Spheres with depth-of-field*
