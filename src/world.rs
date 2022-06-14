@@ -1,5 +1,5 @@
 use nalgebra::Vector3;
-use crate::core::{Point3, Color};
+use crate::utils::{Point3, Color};
 use crate::material::Material;
 use crate::ray::Ray;
 

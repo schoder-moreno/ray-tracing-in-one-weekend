@@ -1,6 +1,6 @@
 use nalgebra::{Vector3,clamp};
 
-use crate::{core::{Color, Point3}, world::{World, HitRecord}, camera::Camera, ray::Ray, material::Material};
+use crate::{utils::{Color, Point3}, world::{World, HitRecord}, camera::Camera, ray::Ray, material::Material};
 
 pub struct Renderer {
     pub world: World,
@@ -35,11 +35,10 @@ impl Renderer {
         }
 
         let mut record = HitRecord{point: Point3::new(0., 0., 0.), normal: Vector3::new(0.,0.,0.), t:0. , front_face:false, material: Material::Lambertian { albedo: Color::new(0.,0.,0.) }};
+
         if self.world.hit(ray, 0.001, f64::MAX, &mut record){
-            let mut scattered_ray = Ray::new(Point3::new(0.,0.,0.), Vector3::new(0.,0.,0.));
-            let mut attenuation = Color::new(0.,0.,0.);
-            let material = record.material.clone();
-            if material.scatter(ray, &mut record, &mut attenuation, &mut scattered_ray) {
+            let (scattered, attenuation, scattered_ray) = record.material.scatter(ray, &record);
+            if scattered {
                 return attenuation.component_mul(&self.ray_color(&scattered_ray, depth-1));
             }
             return Color::new(0.,0.,0.); 

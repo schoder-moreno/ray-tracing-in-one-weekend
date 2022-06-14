@@ -1,5 +1,5 @@
 use nalgebra::Vector3;
-use crate::core::{Point3, degrees_to_radians, random_in_unit_disk};
+use crate::utils::{Point3, degrees_to_radians, random_in_unit_disk};
 use crate::ray::Ray;
 
 pub struct Camera{

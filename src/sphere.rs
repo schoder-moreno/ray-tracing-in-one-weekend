@@ -1,4 +1,4 @@
-use crate::core::Point3;
+use crate::utils::Point3;
 use crate::world::{Object, HitRecord};
 use crate::material::Material;
 use crate::ray::Ray;

@@ -1,5 +1,7 @@
 Ray tracing in one weekend in Rust
 ===
+![](images/13.1.png)
+
 A Rust implementation of Peter Shirley's [Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html).
 
 ## How to run
@@ -83,3 +85,8 @@ Images showing the progression of the book, chapter by chapter.
 ![](images/12.2.png)
 
 *Spheres with depth-of-field*
+
+## 13 A Final Render
+![](images/13.1.png)
+
+*Final scene*

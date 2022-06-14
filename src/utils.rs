@@ -6,13 +6,17 @@ pub type Color = Vector3<f64>;
 
 pub const PI: f64 = 3.1415926535897932385;
 
-pub fn random_vector3(min: f64, max: f64) -> Vector3<f64> {
+pub fn random_vector3() -> Vector3<f64> {
+    return Vector3::new(rand::thread_rng().gen(), rand::random::<f64>(), rand::random::<f64>());
+}
+
+pub fn random_vector3_range(min: f64, max: f64) -> Vector3<f64> {
     return Vector3::new(rand::thread_rng().gen_range(min..max), rand::thread_rng().gen_range(min..max), rand::thread_rng().gen_range(min..max));
 }
 
 pub fn random_in_unit_sphere() -> Vector3<f64> {
     loop {
-        let p = random_vector3(-1., 1.);
+        let p = random_vector3_range(-1., 1.);
         if p.magnitude_squared() >= 1. {
             continue;
         } 
@@ -30,7 +34,7 @@ pub fn degrees_to_radians(degrees: f64) -> f64 {
 
 pub fn random_in_unit_disk() -> Vector3<f64> {
     loop {
-        let p = Vector3::new(rand::thread_rng().gen_range((-1.)..1.), rand::thread_rng().gen_range((-1.)..1.), 0.);
+        let p = Vector3::new(rand::thread_rng().gen_range(-1.0..1.), rand::thread_rng().gen_range(-1.0..1.), 0.);
         if p.magnitude_squared() >= 1. {
             continue;
         }
