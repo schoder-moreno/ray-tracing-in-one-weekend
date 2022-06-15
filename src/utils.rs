@@ -1,3 +1,4 @@
+use image::Rgb;
 use nalgebra::{Vector3};
 use rand::Rng;
 
@@ -40,4 +41,8 @@ pub fn random_in_unit_disk() -> Vector3<f64> {
         }
         return p;
     }
+}
+
+pub fn to_rgb(color: Color) -> Rgb<u8> {
+    Rgb([color.x as u8, color.y as u8, color.z as u8])
 }

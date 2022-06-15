@@ -1,4 +1,5 @@
 use nalgebra::Vector3;
+use crate::sphere::Sphere;
 use crate::utils::{Point3, Color};
 use crate::material::Material;
 use crate::ray::Ray;
@@ -24,7 +25,7 @@ pub trait Object {
 }
 
 pub struct World {
-    objects: Vec<Box<dyn Object>>,
+    objects: Vec<Sphere>,
 }
 
 impl World {
@@ -32,8 +33,8 @@ impl World {
         Self { objects: Vec::new() }
     }
 
-    pub fn push<S: Object + 'static>(&mut self, object: S) {
-        self.objects.push(Box::new(object));
+    pub fn push(&mut self, object: Sphere) {
+        self.objects.push(object);
     }
 }
 

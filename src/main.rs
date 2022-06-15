@@ -1,14 +1,14 @@
-use crate::utils::{random_vector3, random_vector3_range};
-
-use crate::utils::{Point3, Color};
-use image::{RgbImage, ImageBuffer, Rgb};
+use crate::utils::{Point3, Color, random_vector3, random_vector3_range};
+use image::{RgbImage, ImageBuffer};
 use camera::Camera;
 use nalgebra::Vector3;
 use rand::Rng;
+use utils::to_rgb;
 use world::World;
 use material::Material;
 use renderer::Renderer;
 use sphere::Sphere;
+use rayon::prelude::*;
 
 mod utils;
 mod ray;
@@ -38,9 +38,9 @@ fn main()
     let vup = Vector3::new(0.,1.,0.);
     let vertical_fov = 20.0;
     let aperture = 0.1;
-    let dist_to_focus = 10.0;
+    let focus_dist = 10.0;
 
-    let camera = Camera::new(lookfrom, lookat, vup, vertical_fov, ASPECT_RATIO, aperture, dist_to_focus);
+    let camera = Camera::new(lookfrom, lookat, vup, vertical_fov, ASPECT_RATIO, aperture, focus_dist);
 
     // Render
 
@@ -54,15 +54,16 @@ fn main()
     };
 
     let mut buffer: RgbImage = ImageBuffer::new(IMAGE_WIDTH, IMAGE_HEIGHT);
-    for (x, y, pixel) in buffer.enumerate_pixels_mut(){
-        if x == 0
-        {
-            print!("\rScanlines remaining: {} ", IMAGE_HEIGHT-y-1);
-        }
+    buffer.enumerate_pixels_mut()
+        .par_bridge()
+        .for_each(|(x, y, pixel)| {
+            if x == 0 {
+                print!("\rScanlines remaining: {} ", IMAGE_HEIGHT-y-1);
+            }
 
-        let pixel_color = renderer.render_pixel(x, y); 
-        *pixel = Rgb([pixel_color.x as u8, pixel_color.y as u8, pixel_color.z as u8]);
-    }
+            *pixel = to_rgb(renderer.render_pixel(x, y));
+        }
+    );
 
     match buffer.save("image.png")
     {
